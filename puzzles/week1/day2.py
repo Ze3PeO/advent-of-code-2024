@@ -1,36 +1,30 @@
 def p1(inp):
     reports = [list(map(int, line.strip().split(" "))) for line in inp]
 
-    safe_reports = 0
-
-    for report in reports:
-        all_increasing = all(levels[1] - levels[0] > 0 for levels in zip(report, report[1:]))
-        all_decreasing = all(levels[1] - levels[0] < 0 for levels in zip(report, report[1:]))
-        all_safe_diff = all(0 <= abs(levels[1] - levels[0]) <= 3 for levels in zip(report, report[1:]))
-
-        if (all_increasing or  all_decreasing) and all_safe_diff:
-            safe_reports += 1
-
-    return safe_reports
+    return sum(
+        (
+            all(b > a for a, b in zip(rep, rep[1:]))
+            or all(b < a for a, b in zip(rep, rep[1:]))
+        )
+        and all(0 <= abs(b - a) <= 3 for a, b in zip(rep, rep[1:]))
+        for rep in reports
+    )
 
 
 def p2(inp):
-    reports = [list(map(int, line.strip().split(" "))) for line in inp]
+    reports = [list(map(int, line.split())) for line in inp]
 
-    safe_reports = 0
-
-    for report in reports:
-        for modified_report in [report[:i] + report[i+1:] for i in range(len(report))]:
-            all_increasing = all(levels[1] - levels[0] > 0 for levels in zip(modified_report, modified_report[1:]))
-            all_decreasing = all(levels[1] - levels[0] < 0 for levels in zip(modified_report, modified_report[1:]))
-            all_safe_diff = all(0 <= abs(levels[1] - levels[0]) <= 3 for levels in zip(modified_report, modified_report[1:]))
-
-            if (all_increasing or all_decreasing) and all_safe_diff:
-                safe_reports += 1
-                break
-
-
-    return safe_reports
+    return sum(
+        any(
+            (
+                all(b > a for a, b in zip(mod_rep, mod_rep[1:]))
+                or all(b < a for a, b in zip(mod_rep, mod_rep[1:]))
+            )
+            and all(0 <= abs(b - a) <= 3 for a, b in zip(mod_rep, mod_rep[1:]))
+            for mod_rep in (rep[:i] + rep[i + 1 :] for i in range(len(rep)))
+        )
+        for rep in reports
+    )
 
 
 with open('./input/week1/day2.txt') as file:
