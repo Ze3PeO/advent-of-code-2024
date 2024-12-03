@@ -2,10 +2,7 @@ def p1(inp):
     reports = [list(map(int, line.strip().split(" "))) for line in inp]
 
     return sum(
-        (
-            all(b > a for a, b in zip(rep, rep[1:]))
-            or all(b < a for a, b in zip(rep, rep[1:]))
-        )
+        (all(b > a for a, b in zip(rep, rep[1:])) or all(b < a for a, b in zip(rep, rep[1:])))
         and all(0 <= abs(b - a) <= 3 for a, b in zip(rep, rep[1:]))
         for rep in reports
     )
@@ -16,10 +13,7 @@ def p2(inp):
 
     return sum(
         any(
-            (
-                all(b > a for a, b in zip(mod_rep, mod_rep[1:]))
-                or all(b < a for a, b in zip(mod_rep, mod_rep[1:]))
-            )
+            (all(b > a for a, b in zip(mod_rep, mod_rep[1:])) or all(b < a for a, b in zip(mod_rep, mod_rep[1:])))
             and all(0 <= abs(b - a) <= 3 for a, b in zip(mod_rep, mod_rep[1:]))
             for mod_rep in (rep[:i] + rep[i + 1 :] for i in range(len(rep)))
         )
